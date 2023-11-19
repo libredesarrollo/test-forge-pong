@@ -16,7 +16,7 @@ void main() {
 }
 
 class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
-  MyGame() : super(gravity: Vector2(0, 20));
+  MyGame() : super(gravity: Vector2(0, 0));
 
   @override
   FutureOr<void> onLoad() {

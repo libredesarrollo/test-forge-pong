@@ -10,10 +10,11 @@ List<Wall> createBoundaries(Forge2DGame game, {double? strokeWidth}) {
   final bottomLeft = visibleRect.bottomLeft.toVector2();
 
   return [
-    Wall(topLeft, topRight, strokeWidth: strokeWidth),
-    Wall(topRight, bottomRight, strokeWidth: strokeWidth),
+    Wall(topLeft, topRight, strokeWidth: strokeWidth, tiltinvert: true),
+    Wall(topRight, bottomRight,
+        strokeWidth: strokeWidth, tiltinvert: true, tiltX: false),
     Wall(bottomLeft, bottomRight, strokeWidth: strokeWidth),
-    Wall(topLeft, bottomLeft, strokeWidth: strokeWidth),
+    Wall(topLeft, bottomLeft, strokeWidth: strokeWidth, tiltX: false),
   ];
 }
 
@@ -21,11 +22,17 @@ class Wall extends BodyComponent with ContactCallbacks {
   final Vector2 start;
   final Vector2 end;
   final double strokeWidth;
+  bool tiltinvert;
+  bool tiltX;
+
   int _tiltRightControl = 0;
   int _tiltRightBar = 0;
 
-  Wall(this.start, this.end, {double? strokeWidth})
-      : strokeWidth = strokeWidth ?? 1;
+  Wall(this.start, this.end,
+      {double? strokeWidth, bool? tiltinvert, bool? tiltX})
+      : strokeWidth = strokeWidth ?? 1,
+        tiltinvert = tiltinvert ?? false,
+        tiltX = tiltX ?? true;
 
   @override
   Body createBody() {
@@ -43,12 +50,13 @@ class Wall extends BodyComponent with ContactCallbacks {
   @override
   void beginContact(Object other, Contact contact) {
     if (other is BallBody) {
-      if (other.body.position.x < 0) {
+      final tild = tiltX ? other.body.position.x : other.body.position.y;
+      if (tild < 0) {
         _tiltRightControl = -1;
       } else {
         _tiltRightControl = 1;
       }
-      print('${other.body.position}  ${_tiltRightControl}  ${_tiltRightBar}');
+      // print('${other.body.position}  ${_tiltRightControl}  ${_tiltRightBar}');
     }
 
     super.beginContact(other, contact);
@@ -61,7 +69,11 @@ class Wall extends BodyComponent with ContactCallbacks {
       // if (_tiltRightBar == -1) {
       // } else {
       // print(' ${_tiltRightControl}  ${_tiltRightBar}');
-      body.setTransform(body.position, _tiltRightBar.toDouble() * .02);
+      if (tiltinvert) {
+        body.setTransform(body.position, _tiltRightBar.toDouble() * .04 * -1);
+      } else {
+        body.setTransform(body.position, _tiltRightBar.toDouble() * .04);
+      }
       // }
     }
 

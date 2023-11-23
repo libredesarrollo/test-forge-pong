@@ -13,9 +13,7 @@ class BallBody extends BodyComponent with ContactCallbacks {
   @override
   void beginContact(Object other, Contact contact) {
     body.linearVelocity *= 5;
-    // if (other is BodyComponent) {
-    //   other.body.setTransform(other.position, .1);
-    // }
+
     super.beginContact(other, contact);
   }
 

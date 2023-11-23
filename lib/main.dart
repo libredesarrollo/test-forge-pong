@@ -22,6 +22,9 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
   FutureOr<void> onLoad() {
     world.add(BarBody(
         Vector2(0, camera.visibleWorldRect.bottomRight.toVector2().y * .9)));
+    world.add(BarBody(
+        Vector2(0, camera.visibleWorldRect.topRight.toVector2().y * .9),
+        playerOne: false));
     world.add(BallBody());
     world.addAll(createBoundaries(this));
 

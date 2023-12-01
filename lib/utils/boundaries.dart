@@ -10,10 +10,10 @@ List<Wall> createBoundaries(Forge2DGame game, {double? strokeWidth}) {
   final bottomLeft = visibleRect.bottomLeft.toVector2();
 
   return [
-    Wall(topLeft, topRight, strokeWidth: strokeWidth, tiltinvert: true),
+    // Wall(topLeft, topRight, strokeWidth: strokeWidth, tiltinvert: true),
     Wall(topRight, bottomRight,
         strokeWidth: strokeWidth, tiltinvert: true, tiltX: false),
-    Wall(bottomLeft, bottomRight, strokeWidth: strokeWidth),
+    // Wall(bottomLeft, bottomRight, strokeWidth: strokeWidth),
     Wall(topLeft, bottomLeft, strokeWidth: strokeWidth, tiltX: false),
   ];
 }

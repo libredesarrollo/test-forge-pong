@@ -18,16 +18,36 @@ void main() {
 class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
   MyGame() : super(gravity: Vector2(0, 0));
 
+  double limitBall = 0;
+  final BallBody _ballBody = BallBody();
+
   @override
   FutureOr<void> onLoad() {
+    limitBall = camera.visibleWorldRect.bottomRight.toVector2().y + 50;
+
     world.add(BarBody(
         Vector2(0, camera.visibleWorldRect.bottomRight.toVector2().y * .9)));
     world.add(BarBody(
         Vector2(0, camera.visibleWorldRect.topRight.toVector2().y * .9),
         playerOne: false));
-    world.add(BallBody());
+    world.add(_ballBody);
     world.addAll(createBoundaries(this));
 
     return super.onLoad();
+  }
+
+  _resetBall() {
+    // _ballBody.body.linearVelocity = Vector2.all(0);
+    final velocity = (Vector2.random() - Vector2.random()) * 50;
+    _ballBody.body.linearVelocity = velocity;
+    _ballBody.body.setTransform(Vector2(0, 0), 0);
+  }
+
+  @override
+  void update(double dt) {
+    if (_ballBody.isLoaded && _ballBody.position.y.abs() > limitBall) {
+      _resetBall();
+    }
+    super.update(dt);
   }
 }
